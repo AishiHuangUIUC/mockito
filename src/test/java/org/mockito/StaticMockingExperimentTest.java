@@ -64,7 +64,7 @@ public class StaticMockingExperimentTest extends TestBase {
                 Mockito.framework()
                         .getInvocationFactory()
                         .createInvocation(
-                                mock,
+                                mock,  // changed to verified
                                 withSettings().build(Foo.class),
                                 staticMethod,
                                 realMethod,
