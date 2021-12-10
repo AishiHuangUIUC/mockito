@@ -40,7 +40,7 @@ import org.mockitoutil.TestBase;
  */
 public class StaticMockingExperimentTest extends TestBase {
 
-    Foo mock = Mockito.mock(Foo.class);
+    Foo mock = Mockito.mock(Foo.class); // changed to verified
     MockHandler handler = Mockito.mockingDetails(mock).getMockHandler();
     Method staticMethod;
     InvocationFactory.RealMethodBehavior realMethod =
@@ -96,7 +96,8 @@ public class StaticMockingExperimentTest extends TestBase {
         handler.handle(verification);
 
         // verify zero times, method with different argument
-        verify(mock, times(0));
+//        verify(mock, times(0));
+        verifyNoMoreInteractions(mock);
         Invocation differentArg =
                 Mockito.framework()
                         .getInvocationFactory()
@@ -112,6 +113,7 @@ public class StaticMockingExperimentTest extends TestBase {
     @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
     @Test
     public void verification_failure_static_method() throws Throwable {
+        verifyNoMoreInteractions(mock);
         // register staticMethod call on mock
         Invocation invocation =
                 Mockito.framework()
@@ -175,10 +177,12 @@ public class StaticMockingExperimentTest extends TestBase {
                                 realMethod,
                                 "different arg");
         assertEquals(null, handler.handle(differentArg));
+        verifyNoMoreInteractions(mock);
     }
 
     @Test
     public void do_answer_stubbing_static_method() throws Throwable {
+        verifyNoMoreInteractions(mock);
         // register stubbed return value
         Object ignored = doReturn("hey").when(mock);
 
@@ -238,6 +242,7 @@ public class StaticMockingExperimentTest extends TestBase {
 
     @Test
     public void stubbing_new() throws Throwable {
+        verifyNoMoreInteractions(mock);
         Constructor<Foo> ctr = Foo.class.getConstructor(String.class);
         Method adapter = ConstructorMethodAdapter.class.getDeclaredMethods()[0];
 
@@ -277,6 +282,7 @@ public class StaticMockingExperimentTest extends TestBase {
     @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
     @Test
     public void verifying_new() throws Throwable {
+        verifyNoMoreInteractions(mock);
         Constructor<Foo> ctr = Foo.class.getConstructor(String.class);
         Method adapter = ConstructorMethodAdapter.class.getDeclaredMethods()[0];
 
